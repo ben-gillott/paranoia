@@ -56,35 +56,18 @@ function love.load()
     -- set up our sound effects; later, we can just index this table and
     -- call each entry's `play` method
     gSounds = {
+        --TODO: Load music here
         -- ['music'] = love.audio.newSource('sounds/music.wav')
     }
 
-    -- the state machine we'll be using to transition between various states
-    -- in our game instead of clumping them together in our update and draw
-    -- methods
-    --
-    -- our current game state can be any of the following:
-    -- 1. 'start' (the beginning of the game, where we're told to press Enter)
-    -- 2. 'paddle-select' (where we get to choose the color of our paddle)
-    -- 3. 'serve' (waiting on a key press to serve the ball)
-    -- 4. 'play' (the ball is in play, bouncing between paddles)
-    -- 5. 'victory' (the current level is over, with a victory jingle)
-    -- 6. 'game-over' (the player has lost; display score and allow restart)
     gStateMachine = StateMachine {
-        ['start'] = function() return StartState() end,
         ['play'] = function() return PlayState() end,
-        ['serve'] = function() return ServeState() end,
-        ['game-over'] = function() return GameOverState() end,
-        ['victory'] = function() return VictoryState() end,
-        ['high-scores'] = function() return HighScoreState() end,
-        ['enter-high-score'] = function() return EnterHighScoreState() end,
-        ['paddle-select'] = function() return PaddleSelectState() end
     }
-    gStateMachine:change('start', {
-        -- highScores = loadHighScores()
+    gStateMachine:change('play', {
+        --TODO: First state params would go here
     })
 
-    -- play our music outside of all states and set it to looping
+    -- TODO: play music outside of all states and set it to looping
     -- gSounds['music']:play()
     -- gSounds['music']:setLooping(true)
 
@@ -166,7 +149,8 @@ function love.draw()
         VIRTUAL_WIDTH / (backgroundWidth - 1), VIRTUAL_HEIGHT / (backgroundHeight - 1))
     
     -- use the state machine to defer rendering to the current state we're in
-    -- gStateMachine:render()
+    
+    gStateMachine:render()
     
     push:apply('end')
 end
