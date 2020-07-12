@@ -21,8 +21,11 @@ function Board:init()
 end
 
 function Board:update(dt)
+--loop and update all tiles to math equat match board corner
 
 end
+
+
 
 function Board:render()
     for i=1,5 do
