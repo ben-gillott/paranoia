@@ -18,13 +18,30 @@ function Board:init()
             map[i][j] = Tile(self.tile_size, 0, self.corner_x + (self.tile_gap+self.tile_size)*i, self.corner_y + (self.tile_gap+self.tile_size)*j)
         end
     end
+
 end
 
 function Board:update(dt)
---loop and update all tiles to math equat match board corner
-
+--loop and update all tiles tx ty to match equat match board corner
+    self.corner_x = 100
+    self:testFunc()
 end
 
+function Board:testFunc()
+    offsetx = self.corner_x + (self.tile_gap+self.tile_size);
+    offsety = self.corner_y + (self.tile_gap+self.tile_size);
+
+    for i=1,5 do
+        for j=1,5 do
+            -- print(self.tile_gap)
+            map[i][j]:setTarget(offsetx*i, offsety*j)
+        end
+    end
+end
+
+function Board:move(dir_string)
+
+end
 
 
 function Board:render()

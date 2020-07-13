@@ -15,6 +15,11 @@ function Tile:init(tile_size, type, x, y)
     self.t_x = x
 end
 
+function Tile:setTarget(tx, ty)
+    self.t_y = ty
+    self.t_x = tx
+end
+
 function Tile:update(dt)
 --lerp target xy and current xy (if close enough dont?) jitter?
 
