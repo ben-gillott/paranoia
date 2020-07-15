@@ -5,10 +5,9 @@ local map = {}
 
 local tile_gap = 5
 local tile_size = 20
-local board_w = 5
-local board_h = 5
+-- local board_w = 5
+-- local board_h = 5
 local shiftDist = tile_gap + tile_size
--- local tiletest
 
 function Board:init(cx, cy)
     --TODO: Update values from params
@@ -18,7 +17,7 @@ function Board:init(cx, cy)
     for i=1,5 do
         map[i] = {}
         for j=1,5 do
-            map[i][j] = Tile(tile_size, 0, self.corner_x + (tile_gap+tile_size)*i, self.corner_y + (tile_gap+tile_size)*j)
+            map[i][j] = Tile(tile_size, "safe", self.corner_x + (tile_gap+tile_size)*i, self.corner_y + (tile_gap+tile_size)*j)
         end
     end
 end
@@ -28,6 +27,17 @@ function Board:update(dt)
         for j=1,5 do
             -- print(self.tile_gap)
             map[i][j]:update(dt)
+        end
+    end
+end
+
+function Board:addDanger(dangerLevel)
+    for i=1,5 do
+        for j=1,5 do
+            -- print(self.tile_gap)
+            if (math.random()*(100/dangerLevel)) <= 1 then
+                map[i][j]:setState("danger")
+            end
         end
     end
 end
