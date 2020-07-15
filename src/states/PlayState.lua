@@ -6,9 +6,11 @@ Comment
 PlayState = Class{__includes = BaseState}
 
 local gboard
-
+local offsetLimit = 2
+local offsetX = 0
+local offsetY = 0
 function PlayState:enter()
-    gboard = Board(25,25)
+    gboard = Board(130,40)
 end
 
 function PlayState:update(dt)    
@@ -16,18 +18,30 @@ function PlayState:update(dt)
     gboard:update(dt)
 
     if love.keyboard.wasPressed('w') then
-        gboard:move("up")
+        if offsetY <= offsetLimit then
+            gboard:move("up")
+            offsetY = offsetY + 1
+        end
+        --TODO: Else add shake/feedback for each of these statements
     elseif love.keyboard.wasPressed('s') then
-        gboard:move("down")
-    elseif love.keyboard.wasPressed('a') then
-        gboard:move("left")
-    elseif love.keyboard.wasPressed('d') then
-        gboard:move("right")
-    end
+        if offsetY >= -offsetLimit then
+            gboard:move("down")
+            offsetY = offsetY - 1
+        end
 
+    elseif love.keyboard.wasPressed('a') then
+        if offsetX >= -offsetLimit then
+            gboard:move("left")
+            offsetX = offsetX - 1
+        end
+    elseif love.keyboard.wasPressed('d') then
+        if offsetX <= offsetLimit then
+            gboard:move("right")
+            offsetX = offsetX + 1
+        end
+    end
 end
 
---on move update board cornerxy
 
 
 function PlayState:render()
