@@ -16,6 +16,13 @@ function Tile:setState(stateIn)
     self.state = stateIn
 end
 
+function Tile:onDanger()
+    if self.state == "danger" then
+        return true
+    end
+    return false
+end
+
 function Tile:setTarget(tx, ty)
     self.t_y = ty
     self.t_x = tx

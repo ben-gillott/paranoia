@@ -3,12 +3,8 @@ Board = Class{}
 
 local map = {}
 
--- local tile_gap = 5 >
--- local tile_size = 20 >
-
--- local board_w = 5
--- local board_h = 5
-
+local centerI = 3
+local centerJ = 3
 
 function Board:init(tile_gapIn, tile_sizeIn, cx, cy)
     --TODO: Update values from params
@@ -34,14 +30,30 @@ function Board:update(dt)
     end
 end
 
-function Board:addDanger(dangerLevel)
-    for i=1,5 do
-        for j=1,5 do
-            -- print(self.tile_gap)
-            if (math.random()*(100/dangerLevel)) <= 1 then
-                map[i][j]:setState("danger")
-            end
-        end
+-- function Board:addDanger(dangerLevel)
+--     for i=1,5 do
+--         for j=1,5 do
+--             -- print(self.tile_gap)
+--             if (math.random()*(100/dangerLevel)) <= 1 then
+--                 map[i][j]:setState("danger")
+--             end
+--         end
+--     end
+-- end
+
+
+
+function Board:addRandomDanger()
+    --Get a random i and j from 1 to 5 inclusive
+    local randomI = math.ceil(math.random(1,5))
+    local randomJ = math.ceil(math.random(1,5))
+    map[randomI][randomJ]:setState("danger")
+end
+
+
+function Board:manualDanger(iIn,jIn)
+    if(iIn > 0 and iIn < 6 and jIn > 0 and jIn < 6)then
+        map[iIn][jIn]:setState("danger")
     end
 end
 
@@ -50,12 +62,28 @@ function Board:move(dir)
 
     if dir == "up" then
         self.corner_y = self.corner_y - shiftDist
+        centerJ = centerJ+1 --center goes down in board
     elseif dir == "down" then
         self.corner_y = self.corner_y + shiftDist
+        centerJ = centerJ-1 --center moves up in board
     elseif dir == "left" then
         self.corner_x = self.corner_x - shiftDist
+        centerI = centerI + 1 --center moves right in board
     elseif dir == "right" then
         self.corner_x = self.corner_x + shiftDist
+        centerI = centerI - 1 --center moves left in baord
+    end
+end
+
+function Board:isOOB()
+    return centerI < 1 or centerI > 5 or centerJ < 1 or centerJ > 5
+end
+
+function Board:onDanger()
+    if not Board:isOOB() then
+        return map[centerI][centerJ]:onDanger()
+    else
+        return false --No tiles if outside
     end
 end
 

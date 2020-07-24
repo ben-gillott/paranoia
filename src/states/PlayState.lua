@@ -8,11 +8,16 @@ PlayState = Class{__includes = BaseState}
 local gboard
 local gplayer
 --Check the offset of the board and if it is out of bounds
---TODO: use offsets to get death
-local offsetLimit = 2
-local offsetX = 0
-local offsetY = 0
+--TODO: In prog - use offsets to get death
 
+--Coordinates that are at the center of the screen rn
+local i = 3
+local j = 3
+-- local offsetLimit = 2
+-- local offsetX = 0
+-- local offsetY = 0
+
+--TODO:
 TileGap = 3
 TileSize = 20
 InitBoardX = 120
@@ -21,15 +26,20 @@ InitBoardY = 30
 local dangerLevel = 20 --0 to 100 in percent chance of a tile changing on move
 
 function PlayState:enter()
+    --Create the 
     gboard = Board(TileGap, TileSize, InitBoardX, InitBoardY)
+    --Create the player object at the center
     gplayer = Player("normal", InitBoardX+3*TileGap+3.5*TileSize, InitBoardY+3*TileGap+3.5*TileSize)
+
+    --TODO: Manual danger testing
+    gboard:manualDanger(1,5)
 end
 
 function PlayState:update(dt)    
     gboard:updateTargets()
+    
     gboard:update(dt)
-
-    --Get keyboard movement
+    --#Get keyboard movement
     if love.keyboard.wasPressed('w') then
         self:moveBoard("up")
     elseif love.keyboard.wasPressed('s') then
@@ -39,35 +49,39 @@ function PlayState:update(dt)
     elseif love.keyboard.wasPressed('d') then
         self:moveBoard("right")
     end
+
+
+    --check OOB
+    if gboard:isOOB() then --is off the board, fall off
+        gplayer:setState("dead")
+        print("OOB")
+    end
+    --Check if on danger 
+    if gboard:onDanger() then --is on board but on danger tile
+        gplayer:setState("dead")
+        print("Collided")
+    end
+
+    --for testing
+    if (not gboard:onDanger()) and (not gboard:isOOB()) then
+        gplayer:setState("normal")
+    end
+
 end
 
 --Move the board in a direction
 function PlayState:moveBoard(dir)
     if dir == "up" then
-        if offsetY <= offsetLimit then
-            gboard:move("up")
-            offsetY = offsetY + 1
-        end
+        gboard:move("up")
     elseif dir == "down" then
-        if offsetY >= -offsetLimit then
-            gboard:move("down")
-            offsetY = offsetY - 1
-        end
+        gboard:move("down")
     elseif dir == "left" then
-        if offsetX >= -offsetLimit then
-            gboard:move("left")
-            offsetX = offsetX - 1
-        end
+        gboard:move("left")
     elseif dir == "right" then
-        if offsetX <= offsetLimit then
-            gboard:move("right")
-            offsetX = offsetX + 1
-        end
+        gboard:move("right")
     end
 
-    gboard:addDanger(dangerLevel)
 end
-
 
 function PlayState:render()
     gboard:render()
