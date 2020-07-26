@@ -10,6 +10,7 @@ end
 
 function StartState:update(dt)    
     if love.keyboard.wasPressed('return') then
+        gSounds['level_load']:play()
         gStateMachine:change('play')
     end
 end

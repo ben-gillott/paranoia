@@ -10,6 +10,7 @@ end
 
 function ScoreState:update(dt)    
     if love.keyboard.wasPressed('return') then
+        gSounds['level_load']:play()
         gStateMachine:change('play', {1})
     end
 end

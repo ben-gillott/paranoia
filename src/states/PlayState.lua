@@ -65,6 +65,7 @@ function PlayState:update(dt)
     end
 
     if self.gplayer:getState() == "dead" then
+        gSounds['player_death']:play()
         gStateMachine:change('score', {})
     end
 
@@ -72,6 +73,8 @@ end
 
 --Move the board in a direction
 function PlayState:moveBoard(dir)
+    gSounds['player_move']:play()
+
     if dir == "up" then
         self.gboard:move("up")
     elseif dir == "down" then

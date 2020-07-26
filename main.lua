@@ -57,8 +57,19 @@ function love.load()
     -- call each entry's `play` method
     gSounds = {
         --TODO: Load music here
-        -- ['music'] = love.audio.newSource('sounds/music.wav')
+        ['game_load'] = love.audio.newSource('sounds/temp_sound.wav'),
+        ['level_load'] = love.audio.newSource('sounds/temp_sound.wav'),
+        ['player_move'] = love.audio.newSource('sounds/temp_sound.wav'),
+        ['player_death'] = love.audio.newSource('sounds/temp_sound.wav')
     }
+    -- TODO:MUSIC play music outside of all states and set it to looping
+    --gSounds['temp_effect']:setLooping(true)
+    -- gSounds['level_load']:setVolume(0.9) -- 90% of ordinary volume
+    gSounds['game_load']:setPitch(0.4) -- one octave lower
+    gSounds['level_load']:setPitch(0.6) -- one octave lower
+    gSounds['player_move']:setPitch(2) -- one octave lower
+    gSounds['game_load']:play() --On load sound
+    
 
     gStateMachine = StateMachine {
         ['play'] = function() return PlayState() end,
@@ -68,10 +79,9 @@ function love.load()
     --set the first state and input params
     gStateMachine:change('start', {})
 
-    -- TODO:MUSIC play music outside of all states and set it to looping
-    -- gSounds['music']:play()
-    -- gSounds['music']:setLooping(true)
+
     
+
     love.keyboard.keysPressed = {}
 end
 
