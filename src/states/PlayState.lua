@@ -54,15 +54,12 @@ function PlayState:update(dt)
     --check OOB
     if gboard:isOOB() then --is off the board, fall off
         gplayer:setState("dead")
-        print("OOB")
     end
     --Check if on danger 
     if gboard:onDanger() then --is on board but on danger tile
         gplayer:setState("dead")
-        print("Collided")
     end
-
-    --for testing
+    --for testing - reset to alive after death TODO: REMOVE THIS FOR PROD
     if (not gboard:onDanger()) and (not gboard:isOOB()) then
         gplayer:setState("normal")
     end

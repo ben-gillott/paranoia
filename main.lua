@@ -3,7 +3,7 @@
     Breakout Remake
 
     Game template setup by : Colton Ogden (cogden@cs50.harvard.edu)
-    Author: 
+    Author: benjamin gillott
 
 ]]
 
@@ -23,7 +23,7 @@ function love.load()
     math.randomseed(os.time())
 
     -- set the application title bar
-    love.window.setTitle('Paranoia')
+    love.window.setTitle('Sleepy Boi')
 
     -- initialize our nice-looking retro text fonts
     gFonts = {
@@ -62,18 +62,15 @@ function love.load()
 
     gStateMachine = StateMachine {
         ['play'] = function() return PlayState() end,
+        ['start'] = function() return StartState() end
     }
-    gStateMachine:change('play', {
-        --TODO: First state params would go here
-    })
+    --set the first state and input params
+    gStateMachine:change('start', {})
 
-    -- TODO: play music outside of all states and set it to looping
+    -- TODO:MUSIC play music outside of all states and set it to looping
     -- gSounds['music']:play()
     -- gSounds['music']:setLooping(true)
-
-    -- a table we'll use to keep track of which keys have been pressed this
-    -- frame, to get around the fact that LÖVE's default callback won't let us
-    -- test for input from within other functions
+    
     love.keyboard.keysPressed = {}
 end
 
