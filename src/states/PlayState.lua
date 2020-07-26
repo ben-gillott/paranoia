@@ -18,7 +18,7 @@ local j = 3
 -- local offsetY = 0
 
 --TODO:
-TileGap = 3
+TileGap = 1
 TileSize = 20
 InitBoardX = 120
 InitBoardY = 30

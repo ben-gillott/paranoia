@@ -47,11 +47,11 @@ function Tile:render()
     --TODO: draw self based on current state, xy and dimensions
     if self.state == "safe" then
         --Render normal tile
-        love.graphics.setColor(0,255,0)
+        love.graphics.setColor(0,0,0)
         love.graphics.rectangle('fill', self.x, self.y, self.tile_size, self.tile_size)
     elseif self.state == "danger" then
         --Render danger tile
-        love.graphics.setColor(255,0,0)
-        love.graphics.rectangle('fill', self.x, self.y, self.tile_size, self.tile_size)
+        -- love.graphics.setColor(255,0,0)
+        -- love.graphics.rectangle('fill', self.x, self.y, self.tile_size, self.tile_size)
     end
 end
