@@ -62,7 +62,8 @@ function love.load()
 
     gStateMachine = StateMachine {
         ['play'] = function() return PlayState() end,
-        ['start'] = function() return StartState() end
+        ['start'] = function() return StartState() end,
+        ['score'] = function() return ScoreState() end
     }
     --set the first state and input params
     gStateMachine:change('start', {})

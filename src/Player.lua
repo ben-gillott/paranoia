@@ -1,9 +1,10 @@
 --[[
 
 ]]
-
+--TODO Export to constant
 local pRadius = 10
 local segNum = 8
+
 
 Player = Class{}
 
@@ -19,6 +20,10 @@ end
 
 function Player:setState(stateIn)
     self.state = stateIn
+end
+
+function Player:getState()
+    return self.state
 end
 
 function Player:render()

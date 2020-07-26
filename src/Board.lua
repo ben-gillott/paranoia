@@ -1,7 +1,7 @@
 
 Board = Class{}
 
-local map = {}
+-- local map = {}
 
 local centerI = 3
 local centerJ = 3
@@ -12,20 +12,27 @@ function Board:init(tile_gapIn, tile_sizeIn, cx, cy)
     self.tile_size = tile_sizeIn
     self.corner_x = cx
     self.corner_y = cy
-
+    self.map = {}
+    Board:resetCenter()
+    
     for i=1,5 do
-        map[i] = {}
+        self.map[i] = {}
         for j=1,5 do
-            map[i][j] = Tile(self.tile_size, "safe", self.corner_x + (self.tile_gap+self.tile_size)*i, self.corner_y + (self.tile_gap+self.tile_size)*j)
+            self.map[i][j] = Tile(self.tile_size, "safe", self.corner_x + (self.tile_gap+self.tile_size)*i, self.corner_y + (self.tile_gap+self.tile_size)*j)
         end
     end
+end
+
+function Board:resetCenter()
+    centerI = 3
+    centerJ = 3
 end
 
 function Board:update(dt)
     for i=1,5 do
         for j=1,5 do
             -- print(self.tile_gap)
-            map[i][j]:update(dt)
+            self.map[i][j]:update(dt)
         end
     end
 end
@@ -35,7 +42,7 @@ end
 --         for j=1,5 do
 --             -- print(self.tile_gap)
 --             if (math.random()*(100/dangerLevel)) <= 1 then
---                 map[i][j]:setState("danger")
+--                 self.map[i][j]:setState("danger")
 --             end
 --         end
 --     end
@@ -47,13 +54,13 @@ function Board:addRandomDanger()
     --Get a random i and j from 1 to 5 inclusive
     local randomI = math.ceil(math.random(1,5))
     local randomJ = math.ceil(math.random(1,5))
-    map[randomI][randomJ]:setState("danger")
+    self.map[randomI][randomJ]:setState("danger")
 end
 
 
 function Board:manualDanger(iIn,jIn)
     if(iIn > 0 and iIn < 6 and jIn > 0 and jIn < 6)then
-        map[iIn][jIn]:setState("danger")
+        self.map[iIn][jIn]:setState("danger")
     end
 end
 
@@ -81,7 +88,7 @@ end
 
 function Board:onDanger()
     if not Board:isOOB() then
-        return map[centerI][centerJ]:onDanger()
+        return self.map[centerI][centerJ]:onDanger()
     else
         return false --No tiles if outside
     end
@@ -96,7 +103,7 @@ function Board:updateTargets()
     for i=1,5 do
         for j=1,5 do
             -- print(self.tile_gap)
-            map[i][j]:setTarget(self.corner_x + (self.tile_gap+self.tile_size)*i, self.corner_y + (self.tile_gap+self.tile_size)*j)
+            self.map[i][j]:setTarget(self.corner_x + (self.tile_gap+self.tile_size)*i, self.corner_y + (self.tile_gap+self.tile_size)*j)
         end
     end
 end
@@ -104,7 +111,7 @@ end
 function Board:render()
     for i=1,5 do
         for j=1,5 do
-            map[i][j]:render()
+            self.map[i][j]:render()
         end
     end
 end

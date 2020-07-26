@@ -5,8 +5,8 @@ Comment
 
 PlayState = Class{__includes = BaseState}
 
-local gboard
-local gplayer
+-- local gboard
+-- local gplayer
 --Check the offset of the board and if it is out of bounds
 --TODO: In prog - use offsets to get death
 
@@ -23,22 +23,22 @@ TileSize = 20
 InitBoardX = 120
 InitBoardY = 30
 
-local dangerLevel = 20 --0 to 100 in percent chance of a tile changing on move
 
-function PlayState:enter()
-    --Create the 
-    gboard = Board(TileGap, TileSize, InitBoardX, InitBoardY)
-    --Create the player object at the center
-    gplayer = Player("normal", InitBoardX+3*TileGap+3.5*TileSize, InitBoardY+3*TileGap+3.5*TileSize)
+function PlayState:init()
+    i = 3
+    j = 3
+    self.gboard = Board(TileGap, TileSize, InitBoardX, InitBoardY)
+    self.gplayer = Player("normal", InitBoardX+3*TileGap+3.5*TileSize, InitBoardY+3*TileGap+3.5*TileSize)
 
     --TODO: Manual danger testing
-    gboard:manualDanger(1,5)
+    self.gboard:manualDanger(1,5)
 end
 
+
 function PlayState:update(dt)    
-    gboard:updateTargets()
+    self.gboard:updateTargets()
     
-    gboard:update(dt)
+    self.gboard:update(dt)
     --#Get keyboard movement
     if love.keyboard.wasPressed('w') then
         self:moveBoard("up")
@@ -52,16 +52,20 @@ function PlayState:update(dt)
 
 
     --check OOB
-    if gboard:isOOB() then --is off the board, fall off
-        gplayer:setState("dead")
+    if self.gboard:isOOB() then --is off the board, fall off
+        self.gplayer:setState("dead")
     end
     --Check if on danger 
-    if gboard:onDanger() then --is on board but on danger tile
-        gplayer:setState("dead")
+    if self.gboard:onDanger() then --is on board but on danger tile
+        self.gplayer:setState("dead")
     end
     --for testing - reset to alive after death TODO: REMOVE THIS FOR PROD
-    if (not gboard:onDanger()) and (not gboard:isOOB()) then
-        gplayer:setState("normal")
+    if (not self.gboard:onDanger()) and (not self.gboard:isOOB()) then
+        self.gplayer:setState("normal")
+    end
+
+    if self.gplayer:getState() == "dead" then
+        gStateMachine:change('score', {})
     end
 
 end
@@ -69,18 +73,18 @@ end
 --Move the board in a direction
 function PlayState:moveBoard(dir)
     if dir == "up" then
-        gboard:move("up")
+        self.gboard:move("up")
     elseif dir == "down" then
-        gboard:move("down")
+        self.gboard:move("down")
     elseif dir == "left" then
-        gboard:move("left")
+        self.gboard:move("left")
     elseif dir == "right" then
-        gboard:move("right")
+        self.gboard:move("right")
     end
 
 end
 
 function PlayState:render()
-    gboard:render()
-    gplayer:render()
+    self.gboard:render()
+    self.gplayer:render()
 end
