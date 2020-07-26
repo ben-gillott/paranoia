@@ -18,6 +18,7 @@ require 'src/constants'
 require 'src/Board'
 require 'src/Tile'
 require 'src/Player'
+require 'src/Enemy'
 -- a basic StateMachine class which will allow us to transition to and from
 -- game states smoothly and avoid monolithic code in one file
 require 'src/StateMachine'
