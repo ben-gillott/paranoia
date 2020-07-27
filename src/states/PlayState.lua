@@ -32,7 +32,8 @@ function PlayState:init()
     
     
     --TODO: remove, Manual danger testing
-    self.enemy = Enemy(1, 1, TileGap, TileSize, InitBoardX, InitBoardY)
+    self.enemy = Enemy(1, 1, "right", TileGap, TileSize, InitBoardX, InitBoardY)
+
     self.board:manualDanger(1,5)
     self.board:manualDanger(2,1)
 end
@@ -40,8 +41,8 @@ end
 
 function PlayState:update(dt)    
     self.board:updateTargets()
-    
     self.board:update(dt)
+
     --#Get keyboard movement
     if love.keyboard.wasPressed('w') then
         self:moveBoard("up")
@@ -52,8 +53,8 @@ function PlayState:update(dt)
     elseif love.keyboard.wasPressed('d') then
         self:moveBoard("right")
     elseif love.keyboard.wasPressed('r') then
-        --Active enemy move
-        self.enemy:move("right", self.board:getCornerX(), self.board:getCornerY())
+        --Enemy update
+        self.enemy:autoMove(self.board:getCornerX(), self.board:getCornerY())
     end
 
 
@@ -61,26 +62,27 @@ function PlayState:update(dt)
     if self.board:isOOB() or self.board:onDanger() then --is off the board, fall off
         self.player:setState("dead")
     end
-
     --for testing - reset to alive after death TODO: REMOVE THIS FOR PROD
     if (not self.board:onDanger()) and (not self.board:isOOB()) then
         self.player:setState("normal")
     end
-
     if self.player:getState() == "dead" then
         gSounds['player_death']:play()
         gStateMachine:change('score', {})
     end
 
+
     --Check for enemy death
     if self.board:enemyIsOOB(self.enemy:getI(), self.enemy:getJ()) or self.board:enemyOnDanger(self.enemy:getI(), self.enemy:getJ()) then
         self.enemy:setState("dead")
     end
-    --For testing
+    --For testing TODO: REMOVE FOR PROD
     if (not self.board:enemyIsOOB(self.enemy:getI(), self.enemy:getJ())) and (not self.board:enemyOnDanger(self.enemy:getI(), self.enemy:getJ())) then
         self.enemy:setState("normal")
     end
+    
 end
+
 
 --Move the board in a direction
 function PlayState:moveBoard(dir)

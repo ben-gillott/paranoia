@@ -7,9 +7,10 @@ local segNum = 4
 
 Enemy = Class{}
 
-function Enemy:init(i, j, TileGap, TileSize, InitBoardX, InitBoardY)
+function Enemy:init(i, j, dir, TileGap, TileSize, InitBoardX, InitBoardY)
     self.i = i
     self.j = j
+    self.dir = dir
     self.tileGap = TileGap
     self.tileSize = TileSize
     self.state = "normal" --Can be normal, dead --TODO: Add faling state
@@ -52,6 +53,20 @@ function Enemy:move(dir, BoardCornerX, BoardCornerY)
     self.y = BoardCornerY+self.j*TileGap+(self.j+.5)*TileSize
 end
 
+function Enemy:autoMove(BoardCornerX, BoardCornerY)
+    if self.dir == "up" then
+        self.j = self.j-1
+    elseif self.dir == "down" then
+        self.j = self.j+1
+    elseif self.dir == "left" then
+        self.i = self.i - 1
+    elseif self.dir == "right" then
+        self.i = self.i + 1
+    end
+
+    self.x = BoardCornerX+self.i*TileGap+(self.i+.5)*TileSize
+    self.y = BoardCornerY+self.j*TileGap+(self.j+.5)*TileSize
+end
 
 function Enemy:render()
     -- love.graphics.draw(gTextures['main'], gFrames['balls'][self.skin],self.x, self.y)
