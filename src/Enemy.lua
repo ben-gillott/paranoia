@@ -13,12 +13,12 @@ function Enemy:init(i, j, TileGap, TileSize, InitBoardX, InitBoardY)
     self.tileGap = TileGap
     self.tileSize = TileSize
     self.state = "normal" --Can be normal, dead --TODO: Add faling state
-    self.x = InitBoardX+i*TileGap+(i+.5)*TileSize
-    self.y = InitBoardY+j*TileGap+(j+.5)*TileSize
+    self.x = InitBoardX+self.i*TileGap+(self.i+.5)*TileSize
+    self.y = InitBoardY+self.j*TileGap+(self.j+.5)*TileSize
 end
 
 function Enemy:update(dt)
-    
+
 end
 
 function Enemy:setState(stateIn)
@@ -28,6 +28,30 @@ end
 function Enemy:getState()
     return self.state
 end
+
+function Enemy:getI()
+    return self.i
+end
+function Enemy:getJ()
+    return self.j
+end
+
+function Enemy:move(dir, BoardCornerX, BoardCornerY)
+
+    if dir == "up" then
+        self.j = self.j-1
+    elseif dir == "down" then
+        self.j = self.j+1
+    elseif dir == "left" then
+        self.i = self.i - 1
+    elseif dir == "right" then
+        self.i = self.i + 1
+    end
+
+    self.x = BoardCornerX+self.i*TileGap+(self.i+.5)*TileSize
+    self.y = BoardCornerY+self.j*TileGap+(self.j+.5)*TileSize
+end
+
 
 function Enemy:render()
     -- love.graphics.draw(gTextures['main'], gFrames['balls'][self.skin],self.x, self.y)

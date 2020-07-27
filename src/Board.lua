@@ -48,8 +48,6 @@ end
 --     end
 -- end
 
-
-
 function Board:addRandomDanger()
     --Get a random i and j from 1 to 5 inclusive
     local randomI = math.ceil(math.random(1,5))
@@ -94,9 +92,30 @@ function Board:onDanger()
     end
 end
 
+function Board:enemyIsOOB(i,j)
+    return i < 1 or i > 5 or j < 1 or j > 5
+end
+
+function Board:enemyOnDanger(i,j)
+    if not Board:enemyIsOOB(i,j) then
+        return self.map[i][j]:onDanger()
+    else
+        return false --No tiles if outside
+    end
+end
+
+
 function Board:setCorner(cx, cy)
     self.corner_y = cx
     self.corner_x = cy
+end
+
+function Board:getCornerX()
+    return self.corner_x
+end
+
+function Board:getCornerY()
+    return self.corner_y
 end
 
 function Board:updateTargets()
