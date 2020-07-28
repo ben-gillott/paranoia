@@ -29,15 +29,22 @@ function PlayState:init()
     self.j = 3
     self.board = Board(TileGap, TileSize, InitBoardX, InitBoardY)
     self.player = Player("normal", InitBoardX+3*TileGap+3.5*TileSize, InitBoardY+3*TileGap+3.5*TileSize)
-    
+    self.enemies = {}
     
     --TODO: remove, Manual danger testing
-    self.enemy = Enemy(1, 1, "right", TileGap, TileSize, InitBoardX, InitBoardY)
-
+    self.enemies[#self.enemies+1] = Enemy(1, 1, "right", TileGap, TileSize, InitBoardX, InitBoardY)
+    self.enemies[#self.enemies+1] = Enemy(5, 2, "left", TileGap, TileSize, InitBoardX, InitBoardY)
     self.board:manualDanger(1,5)
-    self.board:manualDanger(2,1)
 end
 
+function PlayState:render()
+    self.board:render()
+    self.player:render()
+    for k,enemy in pairs(self.enemies) do
+        enemy:render()
+    end
+    -- self.enemy:render()
+end
 
 function PlayState:update(dt)    
     self.board:updateTargets()
@@ -53,8 +60,10 @@ function PlayState:update(dt)
     elseif love.keyboard.wasPressed('d') then
         self:moveBoard("right")
     elseif love.keyboard.wasPressed('r') then
-        --Enemy update
-        self.enemy:autoMove(self.board:getCornerX(), self.board:getCornerY())
+        -- Enemy update
+        for k,enemy in pairs(self.enemies) do
+            enemy:autoMove(self.board:getCornerX(), self.board:getCornerY())
+        end
     end
 
 
@@ -73,39 +82,45 @@ function PlayState:update(dt)
 
 
     --Check for enemy death
-    if self.board:enemyIsOOB(self.enemy:getI(), self.enemy:getJ()) or self.board:enemyOnDanger(self.enemy:getI(), self.enemy:getJ()) then
-        self.enemy:setState("dead")
-    end
-    --For testing TODO: REMOVE FOR PROD
-    if (not self.board:enemyIsOOB(self.enemy:getI(), self.enemy:getJ())) and (not self.board:enemyOnDanger(self.enemy:getI(), self.enemy:getJ())) then
-        self.enemy:setState("normal")
+    for k,enemy in pairs(self.enemies) do
+        if self.board:enemyIsOOB(enemy:getI(), enemy:getJ()) or self.board:enemyOnDanger(enemy:getI(), enemy:getJ()) then
+            enemy:setState("dead")
+        end
+        --For testing TODO: REMOVE FOR PROD
+        if (not self.board:enemyIsOOB(enemy:getI(), enemy:getJ())) and (not self.board:enemyOnDanger(enemy:getI(), enemy:getJ())) then
+            enemy:setState("normal")
+        end
     end
     
 end
 
 
+--===========--===========--===========
+
 --Move the board in a direction
 function PlayState:moveBoard(dir)
     gSounds['player_move']:play()
-
+    local oppositeDir = "temp"
     if dir == "up" then
         self.board:move("up")
         --TODO apply to array of enemies
-        self.enemy:move("down", self.board:getCornerX(), self.board:getCornerY())
+        oppositeDir = "down"
     elseif dir == "down" then
         self.board:move("down")
-        self.enemy:move("up", self.board:getCornerX(), self.board:getCornerY())
+        oppositeDir = "up"
     elseif dir == "left" then
         self.board:move("left")
-        self.enemy:move("right", self.board:getCornerX(), self.board:getCornerY())
+        oppositeDir = "right"
     elseif dir == "right" then
         self.board:move("right")
-        self.enemy:move("left", self.board:getCornerX(), self.board:getCornerY())
+        oppositeDir = "left"
+    end
+
+    for k, enemy in pairs(self.enemies) do
+        enemy:move(oppositeDir, self.board:getCornerX(), self.board:getCornerY())
     end
 end
 
-function PlayState:render()
-    self.board:render()
-    self.player:render()
-    self.enemy:render()
+function PlayState:addEnemy()
+    self.enemies[#self.enemies+1] = Enemy(1, 1, "right", TileGap, TileSize, InitBoardX, InitBoardY)
 end
