@@ -32,8 +32,8 @@ function PlayState:init()
     self.enemies = {}
     
     --TODO: remove, Manual danger testing
-    self.enemies[#self.enemies+1] = Enemy(1, 1, "right", TileGap, TileSize, InitBoardX, InitBoardY)
-    self.enemies[#self.enemies+1] = Enemy(5, 2, "left", TileGap, TileSize, InitBoardX, InitBoardY)
+    -- self.enemies[#self.enemies+1] = Enemy(5, 1, "right", TileGap, TileSize, InitBoardX, InitBoardY)
+    self.enemies[#self.enemies+1] = Enemy(5, 3, "left", TileGap, TileSize, InitBoardX, InitBoardY)
     self.board:manualDanger(1,5)
 end
 
@@ -69,32 +69,39 @@ function PlayState:update(dt)
 
     --check OOB or danger tile for character
     if self.board:isOOB() or self.board:onDanger() then --is off the board, fall off
-        self.player:setState("dead")
-    end
-    --for testing - reset to alive after death TODO: REMOVE THIS FOR PROD
-    if (not self.board:onDanger()) and (not self.board:isOOB()) then
-        self.player:setState("normal")
-    end
-    if self.player:getState() == "dead" then
-        gSounds['player_death']:play()
-        gStateMachine:change('score', {})
+        PlayState:gameOver()
     end
 
 
-    --Check for enemy death
+
+    --Check for each enemy
     for k,enemy in pairs(self.enemies) do
+
+        --Enemy death
         if self.board:enemyIsOOB(enemy:getI(), enemy:getJ()) or self.board:enemyOnDanger(enemy:getI(), enemy:getJ()) then
             enemy:setState("dead")
         end
+
+        --Enemy kills player
+        if enemy:getI() == self.board:getI() and enemy:getJ() == self.board:getJ() then
+            PlayState:gameOver()
+        end
+
         --For testing TODO: REMOVE FOR PROD
         if (not self.board:enemyIsOOB(enemy:getI(), enemy:getJ())) and (not self.board:enemyOnDanger(enemy:getI(), enemy:getJ())) then
             enemy:setState("normal")
         end
     end
+
     
 end
 
 
+function PlayState:gameOver()
+    -- self.player:setState("dead")
+    gSounds['player_death']:play()
+    gStateMachine:change('score', {})
+end
 --===========--===========--===========
 
 --Move the board in a direction

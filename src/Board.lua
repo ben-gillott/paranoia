@@ -28,6 +28,15 @@ function Board:resetCenter()
     centerJ = 3
 end
 
+function Board:getI()
+    return centerI
+end
+
+function Board:getJ()
+    return centerJ
+end
+
+
 function Board:update(dt)
     for i=1,5 do
         for j=1,5 do
@@ -37,16 +46,6 @@ function Board:update(dt)
     end
 end
 
--- function Board:addDanger(dangerLevel)
---     for i=1,5 do
---         for j=1,5 do
---             -- print(self.tile_gap)
---             if (math.random()*(100/dangerLevel)) <= 1 then
---                 self.map[i][j]:setState("danger")
---             end
---         end
---     end
--- end
 
 function Board:addRandomDanger()
     --Get a random i and j from 1 to 5 inclusive

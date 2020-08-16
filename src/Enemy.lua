@@ -66,6 +66,8 @@ function Enemy:autoMove(BoardCornerX, BoardCornerY)
 
     self.x = BoardCornerX+self.i*TileGap+(self.i+.5)*TileSize
     self.y = BoardCornerY+self.j*TileGap+(self.j+.5)*TileSize
+
+    -- TODO: AI go brr
 end
 
 function Enemy:render()
