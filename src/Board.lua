@@ -37,6 +37,7 @@ function Board:getJ()
 end
 
 
+
 function Board:update(dt)
     for i=1,5 do
         for j=1,5 do
@@ -60,6 +61,13 @@ function Board:manualDanger(iIn,jIn)
         self.map[iIn][jIn]:setState("danger")
     end
 end
+
+function Board:manualFalling(iIn,jIn)
+    if(iIn > 0 and iIn < 6 and jIn > 0 and jIn < 6)then
+        self.map[iIn][jIn]:setState("falling")
+    end
+end
+
 
 function Board:move(dir)
     local shiftDist = self.tile_gap + self.tile_size
@@ -90,6 +98,16 @@ function Board:onDanger()
         return false --No tiles if outside
     end
 end
+
+
+function Board:onFalling()
+    if not Board:isOOB() then
+        return self.map[centerI][centerJ]:onFalling()
+    else
+        return false --No tiles if outside
+    end
+end
+
 
 function Board:enemyIsOOB(i,j)
     return i < 1 or i > 5 or j < 1 or j > 5

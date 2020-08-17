@@ -35,6 +35,7 @@ function PlayState:init()
     -- self.enemies[#self.enemies+1] = Enemy(5, 1, "right", TileGap, TileSize, InitBoardX, InitBoardY)
     self.enemies[#self.enemies+1] = Enemy(5, 3, "left", TileGap, TileSize, InitBoardX, InitBoardY)
     self.board:manualDanger(1,5)
+    self.board:manualFalling(2,5)
 end
 
 function PlayState:render()
@@ -73,6 +74,9 @@ function PlayState:update(dt)
     end
 
 
+    if (not self.board:onFalling()) and (not self.board:onDanger()) then
+        self.board:manualFalling(self.board:getI(), self.board:getJ())
+    end
 
     --Check for each enemy
     for k,enemy in pairs(self.enemies) do
@@ -86,15 +90,10 @@ function PlayState:update(dt)
         if enemy:getI() == self.board:getI() and enemy:getJ() == self.board:getJ() then
             PlayState:gameOver()
         end
-
-        --For testing TODO: REMOVE FOR PROD
-        if (not self.board:enemyIsOOB(enemy:getI(), enemy:getJ())) and (not self.board:enemyOnDanger(enemy:getI(), enemy:getJ())) then
-            enemy:setState("normal")
-        end
     end
-
-    
 end
+
+
 
 
 function PlayState:gameOver()
