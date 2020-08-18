@@ -44,8 +44,10 @@ function Tile:update(dt)
     self.y = Tile:lerp(self.y, self.t_y, Tile:ease(dt))
 
     if self.state == "falling" then
-        if self.fallcountdown <= 0 then
+        if self.fallcountdown <= 1 then
             self.state = "danger"
+            self.tile_size = 0
+            self.fallcountdown = 0
             --Reset
             -- self.tile_size = self.tile_start_size
             -- self.fallcountdown = fallcountdownValue
@@ -75,7 +77,7 @@ function Tile:render()
         love.graphics.setColor(0,0,0)
         love.graphics.rectangle('fill', self.x, self.y, self.tile_size, self.tile_size)
     elseif self.state == "falling" then
-        love.graphics.setColor(255,0,0)
+        love.graphics.setColor(0,0,0)
         love.graphics.rectangle('fill', self.x + (self.tile_start_size-self.tile_size)/2, self.y + (self.tile_start_size-self.tile_size)/2, self.tile_size, self.tile_size)
     elseif self.state == "danger" then
         

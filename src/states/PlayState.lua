@@ -44,7 +44,6 @@ function PlayState:render()
     for k,enemy in pairs(self.enemies) do
         enemy:render()
     end
-    -- self.enemy:render()
 end
 
 function PlayState:update(dt)    
@@ -81,15 +80,22 @@ function PlayState:update(dt)
     --Check for each enemy
     for k,enemy in pairs(self.enemies) do
 
-        --Enemy death
+        --Enemy ded
+        if enemy:getState() == "dead" then
+            --Remove from db
+            table.remove(self.enemies, k)
+        end
+        --Enemy fall
         if self.board:enemyIsOOB(enemy:getI(), enemy:getJ()) or self.board:enemyOnDanger(enemy:getI(), enemy:getJ()) then
-            enemy:setState("dead")
+            enemy:setState("falling")
         end
 
         --Enemy kills player
-        if enemy:getI() == self.board:getI() and enemy:getJ() == self.board:getJ() then
+        if enemy:getI() == self.board:getI() and enemy:getJ() == self.board:getJ() and (enemy:getState() == "normal") then
             PlayState:gameOver()
         end
+
+        enemy:update(dt)
     end
 end
 

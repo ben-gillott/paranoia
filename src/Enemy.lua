@@ -4,6 +4,7 @@
 --TODO Export to constant
 local enemyRadius = 7
 local segNum = 4
+local fallcountdownValue = 1;
 
 Enemy = Class{}
 
@@ -16,10 +17,22 @@ function Enemy:init(i, j, dir, TileGap, TileSize, InitBoardX, InitBoardY)
     self.state = "normal" --Can be normal, dead --TODO: Add faling state
     self.x = InitBoardX+self.i*TileGap+(self.i+.5)*TileSize
     self.y = InitBoardY+self.j*TileGap+(self.j+.5)*TileSize
+    self.radius = enemyRadius
+    self.fallcountdown = fallcountdownValue
 end
 
 function Enemy:update(dt)
-
+    if self.state == "falling" then
+        if self.fallcountdown <= 0 then
+            self.state = "dead"
+            --Reset
+            -- self.tile_size = self.tile_start_size
+            -- self.fallcountdown = fallcountdownValue
+        else
+            self.fallcountdown = self.fallcountdown - 1*dt
+            -- self.radius = (self.fallcountdown/fallcountdownValue)*enemyRadius
+        end
+    end
 end
 
 function Enemy:setState(stateIn)
@@ -53,6 +66,7 @@ function Enemy:move(dir, BoardCornerX, BoardCornerY)
     self.y = BoardCornerY+self.j*TileGap+(self.j+.5)*TileSize
 end
 
+
 function Enemy:autoMove(BoardCornerX, BoardCornerY)
     if self.dir == "up" then
         self.j = self.j-1
@@ -72,14 +86,6 @@ end
 
 function Enemy:render()
     -- love.graphics.draw(gTextures['main'], gFrames['balls'][self.skin],self.x, self.y)
-    --TODO: check state
-    if self.state == "normal" then
         love.graphics.setColor(255,255,255)
-        love.graphics.circle('fill', self.x, self.y, enemyRadius, segNum)
-
-    elseif self.state == "dead" then
-        love.graphics.setColor(255,255,255)
-        love.graphics.circle('fill', self.x, self.y, enemyRadius/2, segNum)
-    end
-
+        love.graphics.circle('fill', self.x, self.y, self.radius, segNum)
 end
