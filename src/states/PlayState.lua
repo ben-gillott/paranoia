@@ -23,8 +23,12 @@ TileSize = 20
 InitBoardX = 120
 InitBoardY = 30
 
+EnemySpawnDelay = 6
+
 
 function PlayState:init()
+    self.timer = 0
+    self.spawntimer = 0
     self.i = 3
     self.j = 3
     self.board = Board(TileGap, TileSize, InitBoardX, InitBoardY)
@@ -32,10 +36,11 @@ function PlayState:init()
     self.enemies = {}
     
     --TODO: remove, Manual danger testing
-    -- self.enemies[#self.enemies+1] = Enemy(5, 1, "right", TileGap, TileSize, InitBoardX, InitBoardY)
-    self.enemies[#self.enemies+1] = Enemy(5, 3, "left", TileGap, TileSize, InitBoardX, InitBoardY)
-    self.board:manualDanger(1,5)
-    self.board:manualFalling(2,5)
+    -- self:addEnemy(5, 3, "left")
+    
+    -- self.board:manualDanger(1,5)
+    -- self.board:manualFalling(2,5)
+    self:addRandomEnemy()
 end
 
 function PlayState:render()
@@ -50,6 +55,15 @@ function PlayState:update(dt)
     self.board:updateTargets()
     self.board:update(dt)
 
+    self.timer = self.timer + dt
+    
+    self.spawntimer = self.spawntimer + dt
+    if self.spawntimer >= EnemySpawnDelay then
+        self.spawntimer = 0
+        self:addRandomEnemy()
+    end
+
+
     --#Get keyboard movement
     if love.keyboard.wasPressed('w') then
         self:moveBoard("up")
@@ -59,11 +73,6 @@ function PlayState:update(dt)
         self:moveBoard("left")
     elseif love.keyboard.wasPressed('d') then
         self:moveBoard("right")
-    elseif love.keyboard.wasPressed('r') then
-        -- Enemy update
-        for k,enemy in pairs(self.enemies) do
-            enemy:autoMove(self.board:getCornerX(), self.board:getCornerY())
-        end
     end
 
 
@@ -72,7 +81,7 @@ function PlayState:update(dt)
         PlayState:gameOver()
     end
 
-
+    --Tron falling tiles
     if (not self.board:onFalling()) and (not self.board:onDanger()) then
         self.board:manualFalling(self.board:getI(), self.board:getJ())
     end
@@ -80,19 +89,23 @@ function PlayState:update(dt)
     --Check for each enemy
     for k,enemy in pairs(self.enemies) do
 
-        --Enemy ded
+        --Enemy died
         if enemy:getState() == "dead" then
             --Remove from db
             table.remove(self.enemies, k)
         end
-        --Enemy fall
+        --Enemy fell
         if self.board:enemyIsOOB(enemy:getI(), enemy:getJ()) or self.board:enemyOnDanger(enemy:getI(), enemy:getJ()) then
             enemy:setState("falling")
         end
-
         --Enemy kills player
         if enemy:getI() == self.board:getI() and enemy:getJ() == self.board:getJ() and (enemy:getState() == "normal") then
             PlayState:gameOver()
+        end
+        --Update each enemy
+        
+        if enemy:isMoveTime() then
+            enemy:autoMove(self.board:getCornerX(), self.board:getCornerY())
         end
 
         enemy:update(dt)
@@ -133,6 +146,24 @@ function PlayState:moveBoard(dir)
     end
 end
 
-function PlayState:addEnemy()
-    self.enemies[#self.enemies+1] = Enemy(1, 1, "right", TileGap, TileSize, InitBoardX, InitBoardY)
+
+
+
+function PlayState:addRandomEnemy()
+    --Random left right
+    local ix = math.random(2)
+    local dir = "left"
+    local i = 5
+    if ix == 2 then
+        dir = "right"
+        i = 1
+    end
+    
+    local ij = math.random(5)
+
+    self:addEnemy(i, ij ,dir)
+end
+
+function PlayState:addEnemy(i, j, direction)
+    self.enemies[#self.enemies+1] = Enemy(i, j, direction, TileGap, TileSize, InitBoardX, InitBoardY)
 end

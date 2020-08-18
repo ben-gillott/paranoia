@@ -5,10 +5,12 @@
 local enemyRadius = 7
 local segNum = 4
 local fallcountdownValue = 1;
+local moveDelay = 2.5
 
 Enemy = Class{}
 
 function Enemy:init(i, j, dir, TileGap, TileSize, InitBoardX, InitBoardY)
+    self.moveclock = 0
     self.i = i
     self.j = j
     self.dir = dir
@@ -21,7 +23,18 @@ function Enemy:init(i, j, dir, TileGap, TileSize, InitBoardX, InitBoardY)
     self.fallcountdown = fallcountdownValue
 end
 
+function Enemy:isMoveTime()
+    if self.moveclock >= moveDelay then
+        self.moveclock = 0
+        return true
+    else
+        return false
+    end
+end
+
 function Enemy:update(dt)
+    self.moveclock = self.moveclock+dt
+
     if self.state == "falling" then
         if self.fallcountdown <= 0 then
             self.state = "dead"
@@ -30,7 +43,7 @@ function Enemy:update(dt)
             -- self.fallcountdown = fallcountdownValue
         else
             self.fallcountdown = self.fallcountdown - 1*dt
-            -- self.radius = (self.fallcountdown/fallcountdownValue)*enemyRadius
+            self.radius = (self.fallcountdown/fallcountdownValue)*enemyRadius
         end
     end
 end
