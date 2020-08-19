@@ -1,7 +1,7 @@
 Tile = Class{}
 
 local spd = 2;
-local fallcountdownValue = 4;
+local fallcountdownValue = 3;
 
 function Tile:init(tile_start_size, state, x, y)
     -- simple positional and dimensional variables
@@ -44,7 +44,7 @@ function Tile:update(dt)
     self.y = Tile:lerp(self.y, self.t_y, Tile:ease(dt))
 
     if self.state == "falling" then
-        if self.fallcountdown <= 1 then
+        if self.fallcountdown <= 1.5 then
             self.state = "danger"
             self.tile_size = 0
             self.fallcountdown = 0

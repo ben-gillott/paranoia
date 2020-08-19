@@ -32,7 +32,7 @@ function PlayState:init()
     self.i = 3
     self.j = 3
     self.board = Board(TileGap, TileSize, InitBoardX, InitBoardY)
-    self.player = Player("normal", InitBoardX+3*TileGap+3.5*TileSize, InitBoardY+3*TileGap+3.5*TileSize)
+    self.player = Player("normal", InitBoardX+3*TileGap+3.5*TileSize, InitBoardY+3*TileGap+3.5*TileSize, TileGap, TileSize, InitBoardX, InitBoardY)
     self.enemies = {}
     
     --TODO: remove, Manual danger testing
@@ -40,7 +40,7 @@ function PlayState:init()
     
     -- self.board:manualDanger(1,5)
     -- self.board:manualFalling(2,5)
-    self:addRandomEnemy()
+    -- self:addRandomEnemy()
 end
 
 function PlayState:render()
@@ -66,40 +66,41 @@ function PlayState:update(dt)
 
     --#Get keyboard movement
     if love.keyboard.wasPressed('w') then
-        self:moveBoard("up")
+        self.player:move("up")
     elseif love.keyboard.wasPressed('s') then
-        self:moveBoard("down")
+        self.player:move("down")
     elseif love.keyboard.wasPressed('a') then
-        self:moveBoard("left")
+        self.player:move("left")
     elseif love.keyboard.wasPressed('d') then
-        self:moveBoard("right")
+        self.player:move("right")
     end
 
 
     --check OOB or danger tile for character
-    if self.board:isOOB() or self.board:onDanger() then --is off the board, fall off
+    if self.player:isOOB() or self.board:onDanger(self.player:getI(), self.player:getJ()) then --is off the board, fall off
         PlayState:gameOver()
     end
 
     --Tron falling tiles
-    if (not self.board:onFalling()) and (not self.board:onDanger()) then
-        self.board:manualFalling(self.board:getI(), self.board:getJ())
+    if (not self.board:onFalling(self.player:getI(), self.player:getJ()) and (not self.board:onDanger(self.player:getI(), self.player:getJ()))) then
+        self.board:manualFalling(self.player:getI(), self.player:getJ())
     end
 
     --Check for each enemy
     for k,enemy in pairs(self.enemies) do
-
         --Enemy died
         if enemy:getState() == "dead" then
             --Remove from db
             table.remove(self.enemies, k)
         end
         --Enemy fell
-        if self.board:enemyIsOOB(enemy:getI(), enemy:getJ()) or self.board:enemyOnDanger(enemy:getI(), enemy:getJ()) then
+        if self.board:isOOB(enemy:getI(), enemy:getJ()) or self.board:onDanger(enemy:getI(), enemy:getJ()) then
             enemy:setState("falling")
         end
         --Enemy kills player
-        if enemy:getI() == self.board:getI() and enemy:getJ() == self.board:getJ() and (enemy:getState() == "normal") then
+        if enemy:getI() == self.player:getI() and enemy:getJ() == self.player:getJ() and (enemy:getState() == "normal") then
+            --TODO: Implement death delay and animation
+            
             PlayState:gameOver()
         end
         --Update each enemy
@@ -123,27 +124,28 @@ end
 --===========--===========--===========
 
 --Move the board in a direction
-function PlayState:moveBoard(dir)
+function PlayState:movePlayer(dir)
     gSounds['player_move']:play()
     local oppositeDir = "temp"
     if dir == "up" then
-        self.board:move("up")
+        self.player:move("up")
         --TODO apply to array of enemies
         oppositeDir = "down"
     elseif dir == "down" then
-        self.board:move("down")
+        self.player:move("down")
         oppositeDir = "up"
     elseif dir == "left" then
-        self.board:move("left")
+        self.player:move("left")
         oppositeDir = "right"
     elseif dir == "right" then
-        self.board:move("right")
+        self.player:move("right")
         oppositeDir = "left"
     end
 
-    for k, enemy in pairs(self.enemies) do
-        enemy:move(oppositeDir, self.board:getCornerX(), self.board:getCornerY())
-    end
+    --No longer needed since Pivot 3.0
+    -- for k, enemy in pairs(self.enemies) do
+    --     enemy:move(oppositeDir, self.board:getCornerX(), self.board:getCornerY())
+    -- end
 end
 
 

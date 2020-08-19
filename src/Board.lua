@@ -1,11 +1,6 @@
 
 Board = Class{}
 
--- local map = {}
-
-local centerI = 3
-local centerJ = 3
-
 function Board:init(tile_gapIn, tile_sizeIn, cx, cy)
     --TODO: Update values from params
     self.tile_gap = tile_gapIn
@@ -13,7 +8,6 @@ function Board:init(tile_gapIn, tile_sizeIn, cx, cy)
     self.corner_x = cx
     self.corner_y = cy
     self.map = {}
-    Board:resetCenter()
     
     for i=1,5 do
         self.map[i] = {}
@@ -22,20 +16,6 @@ function Board:init(tile_gapIn, tile_sizeIn, cx, cy)
         end
     end
 end
-
-function Board:resetCenter()
-    centerI = 3
-    centerJ = 3
-end
-
-function Board:getI()
-    return centerI
-end
-
-function Board:getJ()
-    return centerJ
-end
-
 
 
 function Board:update(dt)
@@ -68,54 +48,21 @@ function Board:manualFalling(iIn,jIn)
     end
 end
 
-
-function Board:move(dir)
-    local shiftDist = self.tile_gap + self.tile_size
-
-    if dir == "up" then
-        self.corner_y = self.corner_y - shiftDist
-        centerJ = centerJ+1 --center goes down in board
-    elseif dir == "down" then
-        self.corner_y = self.corner_y + shiftDist
-        centerJ = centerJ-1 --center moves up in board
-    elseif dir == "left" then
-        self.corner_x = self.corner_x - shiftDist
-        centerI = centerI + 1 --center moves right in board
-    elseif dir == "right" then
-        self.corner_x = self.corner_x + shiftDist
-        centerI = centerI - 1 --center moves left in baord
-    end
-end
-
-function Board:isOOB()
-    return centerI < 1 or centerI > 5 or centerJ < 1 or centerJ > 5
-end
-
-function Board:onDanger()
-    if not Board:isOOB() then
-        return self.map[centerI][centerJ]:onDanger()
-    else
-        return false --No tiles if outside
-    end
-end
-
-
-function Board:onFalling()
-    if not Board:isOOB() then
-        return self.map[centerI][centerJ]:onFalling()
-    else
-        return false --No tiles if outside
-    end
-end
-
-
-function Board:enemyIsOOB(i,j)
+function Board:isOOB(i,j)
     return i < 1 or i > 5 or j < 1 or j > 5
 end
 
-function Board:enemyOnDanger(i,j)
-    if not Board:enemyIsOOB(i,j) then
+function Board:onDanger(i,j)
+    if not Board:isOOB(i,j) then
         return self.map[i][j]:onDanger()
+    else
+        return false --No tiles if outside
+    end
+end
+
+function Board:onFalling(i,j)
+    if not Board:isOOB(i,j) then
+        return self.map[i][j]:onFalling()
     else
         return false --No tiles if outside
     end
