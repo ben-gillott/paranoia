@@ -40,7 +40,7 @@ function PlayState:init()
     
     -- self.board:manualDanger(1,5)
     -- self.board:manualFalling(2,5)
-    -- self:addRandomEnemy()
+    self:addRandomEnemy()
 end
 
 function PlayState:render()

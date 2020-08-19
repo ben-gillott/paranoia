@@ -35,9 +35,14 @@ function love.load()
 
     -- load up the graphics we'll be using throughout our states
     gTextures = {
-        ['particle'] = love.graphics.newImage('graphics/particle.png'),
+        ['skull_left'] = love.graphics.newImage('graphics/skull_left.png'),
+        ['skull_right'] = love.graphics.newImage('graphics/skull_right.png'),
+        ['tile1'] = love.graphics.newImage('graphics/tile1.png'),
+        ['tile2'] = love.graphics.newImage('graphics/tile2.png'),
         ['background'] = love.graphics.newImage('graphics/background.png')
     }
+
+    -- love.graphics.scale(.2, .2)
 
     -- Quads we will generate for all of our textures; Quads allow us
     -- to show only part of a texture and not the entire thing

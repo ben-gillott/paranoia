@@ -98,7 +98,9 @@ function Enemy:autoMove(BoardCornerX, BoardCornerY)
 end
 
 function Enemy:render()
-    -- love.graphics.draw(gTextures['main'], gFrames['balls'][self.skin],self.x, self.y)
-        love.graphics.setColor(255,255,255)
-        love.graphics.circle('fill', self.x, self.y, self.radius, segNum)
+    love.graphics.setColor(255,255,255)
+    
+    love.graphics.draw(gTextures['skull_left'], self.x, self.y)
+    
+    -- love.graphics.circle('fill', self.x, self.y, self.radius, segNum)
 end
