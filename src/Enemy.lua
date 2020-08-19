@@ -2,7 +2,8 @@
 
 ]]
 --TODO Export to constant
-local enemyRadius = 7
+local enemyScaleVal = .2
+local offset = 35
 local segNum = 4
 local fallcountdownValue = 1;
 local moveDelay = 2.5
@@ -19,7 +20,7 @@ function Enemy:init(i, j, dir, TileGap, TileSize, InitBoardX, InitBoardY)
     self.state = "normal" --Can be normal, dead --TODO: Add faling state
     self.x = InitBoardX+self.i*TileGap+(self.i+.5)*TileSize
     self.y = InitBoardY+self.j*TileGap+(self.j+.5)*TileSize
-    self.radius = enemyRadius
+    self.scale = enemyScaleVal
     self.fallcountdown = fallcountdownValue
 end
 
@@ -43,7 +44,7 @@ function Enemy:update(dt)
             -- self.fallcountdown = fallcountdownValue
         else
             self.fallcountdown = self.fallcountdown - 1*dt
-            self.radius = (self.fallcountdown/fallcountdownValue)*enemyRadius
+            self.scale = (self.fallcountdown/fallcountdownValue)*enemyScaleVal
         end
     end
 end
@@ -99,8 +100,10 @@ end
 
 function Enemy:render()
     love.graphics.setColor(255,255,255)
-    
-    love.graphics.draw(gTextures['skull_left'], self.x, self.y)
-    
+    if self.dir == "left" then
+        love.graphics.draw(gTextures['skull_left'], self.x, self.y, 0, self.scale, self.scale, offset, offset)
+    else
+        love.graphics.draw(gTextures['skull_right'], self.x, self.y, 0, self.scale, self.scale, offset, offset)
+    end
     -- love.graphics.circle('fill', self.x, self.y, self.radius, segNum)
 end

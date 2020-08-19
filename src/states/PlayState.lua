@@ -40,7 +40,8 @@ function PlayState:init()
     
     -- self.board:manualDanger(1,5)
     -- self.board:manualFalling(2,5)
-    self:addRandomEnemy()
+    self:addEnemy(1, 1, "left")
+    self:addEnemy(2, 1, "right")
 end
 
 function PlayState:render()
@@ -60,7 +61,7 @@ function PlayState:update(dt)
     self.spawntimer = self.spawntimer + dt
     if self.spawntimer >= EnemySpawnDelay then
         self.spawntimer = 0
-        self:addRandomEnemy()
+        -- self:addRandomEnemy()
     end
 
 
@@ -83,7 +84,7 @@ function PlayState:update(dt)
 
     --Tron falling tiles
     if (not self.board:onFalling(self.player:getI(), self.player:getJ()) and (not self.board:onDanger(self.player:getI(), self.player:getJ()))) then
-        self.board:manualFalling(self.player:getI(), self.player:getJ())
+        --TODO: readd, self.board:manualFalling(self.player:getI(), self.player:getJ())
     end
 
     --Check for each enemy
