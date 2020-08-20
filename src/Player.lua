@@ -6,6 +6,9 @@ local pRadius = 10
 local segNum = 8
 local playerI = 3
 local playerJ = 3
+local startScale = 1.2
+local offsetX = 5
+local offsetY = 8
 
 Player = Class{}
 
@@ -17,6 +20,7 @@ function Player:init(state, centerX, centerY, tile_gapIn, tile_sizeIn, cx, cy)
     self.y = centerY
     self.corner_x = cx
     self.corner_y = cy
+    self.scale = startScale
     self:resetCenter()
 
 end
@@ -36,13 +40,15 @@ end
 function Player:render()
     -- love.graphics.draw(gTextures['main'], gFrames['balls'][self.skin],self.x, self.y)
     --TODO: check state
-    if self.state == "normal" then
-        love.graphics.setColor(0,0,255)
-        love.graphics.circle('fill', self.x, self.y, pRadius, segNum)
-    elseif self.state == "dead" then
-        love.graphics.setColor(0,255,255)
-        love.graphics.circle('fill', self.x, self.y, pRadius, segNum)
-    end
+    -- if self.state == "normal" then
+    --     love.graphics.setColor(0,0,255)
+    --     love.graphics.circle('fill', self.x, self.y, pRadius, segNum)
+    -- elseif self.state == "dead" then
+    --     love.graphics.setColor(0,255,255)
+    --     love.graphics.circle('fill', self.x, self.y, pRadius, segNum)
+    -- end
+
+    love.graphics.draw(gTextures['char'], self.x, self.y, 0, self.scale, self.scale, offsetX, offsetY)
 
 end
 

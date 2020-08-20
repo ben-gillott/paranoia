@@ -81,7 +81,7 @@ function PlayState:update(dt)
 
     --Tron falling tiles
     if (not self.board:onFalling(self.player:getI(), self.player:getJ()) and (not self.board:onDanger(self.player:getI(), self.player:getJ()))) then
-        self.board:manualFalling(self.player:getI(), self.player:getJ())
+        -- self.board:manualFalling(self.player:getI(), self.player:getJ())
     end
 
     --Check for each enemy

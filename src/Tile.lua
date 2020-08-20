@@ -2,7 +2,7 @@ Tile = Class{}
 
 local fallcountdownValue = 3
 local scaleFactor = 4.25/10 --22
-local offset = -1
+local offset = 11
 function Tile:init(tile_start_size, state, x, y)
     -- simple positional and dimensional variables
     self.tile_start_size = tile_start_size

@@ -39,7 +39,8 @@ function love.load()
         ['skull_right'] = love.graphics.newImage('graphics/skull_right.png'),
         ['tile1'] = love.graphics.newImage('graphics/tile1.png'),
         ['tile2'] = love.graphics.newImage('graphics/tile2.png'),
-        ['background'] = love.graphics.newImage('graphics/background.png')
+        ['background'] = love.graphics.newImage('graphics/background.png'),
+        ['char'] = love.graphics.newImage('graphics/nakedchar.png')
     }
 
     -- love.graphics.scale(.2, .2)
