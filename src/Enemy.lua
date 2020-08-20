@@ -4,6 +4,7 @@
 --TODO Export to constant
 local enemyScaleVal = .2
 local offset = 35
+
 local segNum = 4
 local fallcountdownValue = 1;
 local moveDelay = 2.5

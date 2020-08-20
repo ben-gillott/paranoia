@@ -8,8 +8,6 @@ PlayState = Class{__includes = BaseState}
 -- local board
 -- local player
 --Check the offset of the board and if it is out of bounds
---TODO: In prog - use offsets to get death
-
 --Coordinates that are at the center of the screen rn
 -- local i = 3
 -- local j = 3
@@ -17,7 +15,6 @@ PlayState = Class{__includes = BaseState}
 -- local offsetX = 0
 -- local offsetY = 0
 
---TODO:
 TileGap = 1
 TileSize = 20
 InitBoardX = 120
@@ -35,11 +32,11 @@ function PlayState:init()
     self.player = Player("normal", InitBoardX+3*TileGap+3.5*TileSize, InitBoardY+3*TileGap+3.5*TileSize, TileGap, TileSize, InitBoardX, InitBoardY)
     self.enemies = {}
     
-    --TODO: remove, Manual danger testing
     -- self:addEnemy(5, 3, "left")
     
     -- self.board:manualDanger(1,5)
     -- self.board:manualFalling(2,5)
+    --TODO: Remove
     self:addEnemy(1, 1, "left")
     self:addEnemy(2, 1, "right")
 end
@@ -84,7 +81,7 @@ function PlayState:update(dt)
 
     --Tron falling tiles
     if (not self.board:onFalling(self.player:getI(), self.player:getJ()) and (not self.board:onDanger(self.player:getI(), self.player:getJ()))) then
-        --TODO: readd, self.board:manualFalling(self.player:getI(), self.player:getJ())
+        self.board:manualFalling(self.player:getI(), self.player:getJ())
     end
 
     --Check for each enemy
@@ -130,7 +127,6 @@ function PlayState:movePlayer(dir)
     local oppositeDir = "temp"
     if dir == "up" then
         self.player:move("up")
-        --TODO apply to array of enemies
         oppositeDir = "down"
     elseif dir == "down" then
         self.player:move("down")

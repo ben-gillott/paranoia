@@ -1,18 +1,19 @@
 Tile = Class{}
 
-local spd = 2;
-local fallcountdownValue = 3;
-
+local fallcountdownValue = 3
+local scaleFactor = 4.25/10 --22
+local offset = -1
 function Tile:init(tile_start_size, state, x, y)
     -- simple positional and dimensional variables
     self.tile_start_size = tile_start_size
-    self.tile_size = tile_start_size
+    self.tile_size = tile_start_size*scaleFactor
     self.fallcountdown = fallcountdownValue
     self.state = state
     self.x = x
     self.y = y
     self.t_y = y
     self.t_x = x
+    self.scale = scaleFactor
 end
 
 function Tile:setState(stateIn)
@@ -53,7 +54,7 @@ function Tile:update(dt)
             -- self.fallcountdown = fallcountdownValue
         else
             self.fallcountdown = self.fallcountdown - 1*dt
-            self.tile_size = (self.fallcountdown/fallcountdownValue)*self.tile_start_size
+            self.scale = (self.fallcountdown/fallcountdownValue)*scaleFactor
         end
     end
 
@@ -70,16 +71,10 @@ function Tile:ease(t)
 end
 
 function Tile:render()
-    -- love.graphics.draw(gTextures['main'], gFrames['balls'][self.skin],self.x, self.y)
-    --TODO: draw self based on current state, xy and dimensions
-    if self.state == "safe" then
-        --Render normal tile
-        love.graphics.setColor(0,0,0)
-        love.graphics.rectangle('fill', self.x, self.y, self.tile_size, self.tile_size)
-    elseif self.state == "falling" then
-        love.graphics.setColor(0,0,0)
-        love.graphics.rectangle('fill', self.x + (self.tile_start_size-self.tile_size)/2, self.y + (self.tile_start_size-self.tile_size)/2, self.tile_size, self.tile_size)
-    elseif self.state == "danger" then
-        
+    if not (self.state == "danger") then
+        -- local offsetti = (1/self.scale)*self.tile_start_size
+        local offsetti = (self.tile_start_size)*(fallcountdownValue/self.fallcountdown)/2
+
+        love.graphics.draw(gTextures['tile1'], self.x+offsetti/2, self.y+offsetti/2, 0, self.scale, self.scale, offset, offset)
     end
 end
