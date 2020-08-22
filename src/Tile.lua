@@ -72,7 +72,6 @@ end
 
 function Tile:render()
     if not (self.state == "danger") then
-        -- local offsetti = (1/self.scale)*self.tile_start_size
         local offsetti = (self.tile_start_size)*(fallcountdownValue/self.fallcountdown)/2
 
         love.graphics.draw(gTextures['tile1'], self.x+offsetti/2, self.y+offsetti/2, 0, self.scale, self.scale, offset, offset)
