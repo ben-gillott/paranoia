@@ -21,4 +21,6 @@ function StartState:render()
     love.graphics.printf("Needs a New Name", 0, 50, VIRTUAL_WIDTH, 'center')
     love.graphics.setFont(gFonts['medium'])
     love.graphics.printf("Press Enter To Start", 0, 90, VIRTUAL_WIDTH, 'center')
+
+
 end

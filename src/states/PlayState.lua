@@ -32,12 +32,6 @@ function PlayState:init()
     self.player = Player("normal", InitBoardX+3*TileGap+3.5*TileSize, InitBoardY+3*TileGap+3.5*TileSize, TileGap, TileSize, InitBoardX, InitBoardY)
     self.enemies = {}
     
-    -- self:addEnemy(5, 3, "left")
-    
-    -- self.board:manualDanger(1,5)
-    -- self.board:manualFalling(2,5)
-    --TODO: Remove
-    -- self:addEnemy(1, 1, "left")
     -- self:addEnemy(2, 1, "right")
 end
 
@@ -47,6 +41,12 @@ function PlayState:render()
     for k,enemy in pairs(self.enemies) do
         enemy:render()
     end
+
+    --Render timer
+    love.graphics.setFont(gFonts['medium'])
+    love.graphics.printf("Score : " .. math.floor(self.timer), 5, 5, VIRTUAL_WIDTH, 'left')
+    
+
 end
 
 function PlayState:update(dt)    
@@ -54,6 +54,7 @@ function PlayState:update(dt)
     self.board:update(dt)
 
     self.timer = self.timer + dt
+
     
     self.spawntimer = self.spawntimer + dt
     if self.spawntimer >= EnemySpawnDelay then
@@ -76,7 +77,7 @@ function PlayState:update(dt)
 
     --check OOB or danger tile for character
     if self.player:isOOB() or self.board:onDanger(self.player:getI(), self.player:getJ()) then --is off the board, fall off
-        PlayState:gameOver()
+        PlayState:gameOver(self.timer)
     end
 
     --Tron falling tiles
@@ -99,7 +100,7 @@ function PlayState:update(dt)
         if enemy:getI() == self.player:getI() and enemy:getJ() == self.player:getJ() and (enemy:getState() == "normal") then
             --TODO: Implement death delay and animation
             
-            PlayState:gameOver()
+            PlayState:gameOver(self.timer)
         end
         --Update each enemy
         
@@ -114,10 +115,13 @@ end
 
 
 
-function PlayState:gameOver()
+function PlayState:gameOver(time)
     -- self.player:setState("dead")
     gSounds['player_death']:play()
-    gStateMachine:change('score', {})
+
+    gStateMachine:change('score', {
+        time = math.floor(time)
+    })
 end
 --===========--===========--===========
 
