@@ -2,8 +2,8 @@
 Comment
 ]]
 local anim_scale_min = 1
-local anim_scale_max = 1.2
-local anim_rate = .5
+local anim_scale_max = 1.15
+local anim_rate = .4
 
 TutorialState = Class{__includes = BaseState}
 

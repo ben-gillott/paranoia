@@ -42,6 +42,12 @@ function Board:manualDanger(iIn,jIn)
     end
 end
 
+function Board:manualSafe(i,j)
+    if(i > 0 and i < 6 and j > 0 and j < 6)then
+        self.map[i][j] = Tile(self.tile_size, "safe", self.corner_x + (self.tile_gap+self.tile_size)*i, self.corner_y + (self.tile_gap+self.tile_size)*j)
+    end
+end
+
 function Board:manualFalling(iIn,jIn)
     if(iIn > 0 and iIn < 6 and jIn > 0 and jIn < 6)then
         self.map[iIn][jIn]:setState("falling")

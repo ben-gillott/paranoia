@@ -73,7 +73,7 @@ function love.load()
     -- gSounds['level_load']:setVolume(0.9) -- 90% of ordinary volume
     gSounds['game_load']:setPitch(0.4) -- one octave lower
     gSounds['level_load']:setPitch(0.6) -- one octave lower
-    gSounds['player_move']:setPitch(2) -- one octave lower
+    gSounds['player_move']:setPitch(0.9) -- one octave lower
     gSounds['game_load']:play() --On load sound
     
 

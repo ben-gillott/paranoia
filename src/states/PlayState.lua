@@ -20,7 +20,7 @@ TileSize = 20
 InitBoardX = 120
 InitBoardY = 30
 
-EnemySpawnDelay = 4
+EnemySpawnDelay = 2
 
 
 function PlayState:init()
@@ -32,7 +32,8 @@ function PlayState:init()
     self.player = Player("normal", InitBoardX+3*TileGap+3.5*TileSize, InitBoardY+3*TileGap+3.5*TileSize, TileGap, TileSize, InitBoardX, InitBoardY)
     self.enemies = {}
     
-    -- self:addEnemy(2, 1, "right")
+    self:addEnemy(1, 1, "right")
+    self.board:manualDanger(2,1)
 end
 
 function PlayState:render()
@@ -90,12 +91,16 @@ function PlayState:update(dt)
         --Enemy died
         if enemy:getState() == "dead" then
             --Remove from db
+            self.board:manualSafe(enemy:getI(), enemy:getJ())
             table.remove(self.enemies, k)
+            --set tile to safe
+
         end
         --Enemy fell
         if self.board:isOOB(enemy:getI(), enemy:getJ()) or self.board:onDanger(enemy:getI(), enemy:getJ()) then
             enemy:setState("falling")
         end
+
         --Enemy kills player
         if enemy:getI() == self.player:getI() and enemy:getJ() == self.player:getJ() and (enemy:getState() == "normal") then
             --TODO: Implement death delay and animation
@@ -127,7 +132,7 @@ end
 
 --Move the board in a direction
 function PlayState:movePlayer(dir)
-    gSounds['player_move']:play()
+    
     local oppositeDir = "temp"
     if dir == "up" then
         self.player:move("up")

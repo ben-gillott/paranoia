@@ -7,7 +7,7 @@ local offset = 35
 
 local segNum = 4
 local fallcountdownValue = 1;
-local moveDelay = 2.5
+local moveDelay = .5
 
 Enemy = Class{}
 
@@ -66,6 +66,9 @@ function Enemy:getJ()
 end
 
 function Enemy:move(dir, BoardCornerX, BoardCornerY)
+    if self.state == "falling" or self.state == "dead" then
+        return
+    end
 
     if dir == "up" then
         self.j = self.j-1
@@ -83,6 +86,11 @@ end
 
 
 function Enemy:autoMove(BoardCornerX, BoardCornerY)
+    if self.state == "falling" or self.state == "dead" then
+        return
+    end
+
+    
     if self.dir == "up" then
         self.j = self.j-1
     elseif self.dir == "down" then

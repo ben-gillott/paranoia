@@ -73,6 +73,7 @@ function Player:getJ()
 end
 
 function Player:move(dir)
+    
     local shiftDist = self.tile_gap + self.tile_size
 
     if dir == "up" then
@@ -88,6 +89,9 @@ function Player:move(dir)
         self.x = self.x + shiftDist
         playerI = playerI + 1 --center moves right in baord
     end
+    local clone = gSounds['player_move']:clone()
+    -- gSounds['player_move']:play()
+    clone:play()
 end
 
 function Player:isOOB()
