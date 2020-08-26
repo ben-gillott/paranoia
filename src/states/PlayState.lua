@@ -64,13 +64,13 @@ function PlayState:update(dt)
 
 
     --#Get keyboard movement
-    if love.keyboard.wasPressed('w') then
+    if love.keyboard.wasPressed('w') or love.keyboard.wasPressed('up') then
         self.player:move("up")
-    elseif love.keyboard.wasPressed('s') then
+    elseif love.keyboard.wasPressed('s') or love.keyboard.wasPressed('down') then
         self.player:move("down")
-    elseif love.keyboard.wasPressed('a') then
+    elseif love.keyboard.wasPressed('a') or love.keyboard.wasPressed('left') then
         self.player:move("left")
-    elseif love.keyboard.wasPressed('d') then
+    elseif love.keyboard.wasPressed('d') or love.keyboard.wasPressed('right') then
         self.player:move("right")
     end
 
