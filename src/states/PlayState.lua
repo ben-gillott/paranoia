@@ -31,9 +31,10 @@ function PlayState:init()
     self.board = Board(TileGap, TileSize, InitBoardX, InitBoardY)
     self.player = Player("normal", InitBoardX+3*TileGap+3.5*TileSize, InitBoardY+3*TileGap+3.5*TileSize, TileGap, TileSize, InitBoardX, InitBoardY)
     self.enemies = {}
+    self.tilescore = 0
     
     self:addEnemy(1, 1, "right")
-    self.board:manualDanger(2,1)
+    -- self.board:manualDanger(2,1)
 end
 
 function PlayState:render()
@@ -45,7 +46,7 @@ function PlayState:render()
 
     --Render timer
     love.graphics.setFont(gFonts['medium'])
-    love.graphics.printf("Score : " .. math.floor(self.timer), 5, 5, VIRTUAL_WIDTH, 'left')
+    love.graphics.printf("Tiles : " .. math.floor(self.tilescore) .. " / 25", 5, 5, VIRTUAL_WIDTH, 'left')
     
 
 end
@@ -78,12 +79,13 @@ function PlayState:update(dt)
 
     --check OOB or danger tile for character
     if self.player:isOOB() or self.board:onDanger(self.player:getI(), self.player:getJ()) then --is off the board, fall off
-        PlayState:gameOver(self.timer)
+        PlayState:gameOver(self.tilescore)
     end
 
     --Tron falling tiles
     if (not self.board:onFalling(self.player:getI(), self.player:getJ()) and (not self.board:onDanger(self.player:getI(), self.player:getJ()))) then
         self.board:manualFalling(self.player:getI(), self.player:getJ())
+        self.tilescore = self.tilescore+1
     end
 
     --Check for each enemy
@@ -105,7 +107,7 @@ function PlayState:update(dt)
         if enemy:getI() == self.player:getI() and enemy:getJ() == self.player:getJ() and (enemy:getState() == "normal") then
             --TODO: Implement death delay and animation
             
-            PlayState:gameOver(self.timer)
+            PlayState:gameOver(self.tilescore)
         end
         --Update each enemy
         
@@ -120,12 +122,12 @@ end
 
 
 
-function PlayState:gameOver(time)
+function PlayState:gameOver(score)
     -- self.player:setState("dead")
     gSounds['player_death']:play()
 
     gStateMachine:change('score', {
-        time = math.floor(time)
+        time = math.floor(score)
     })
 end
 --===========--===========--===========

@@ -36,10 +36,24 @@ end
 
 
 function ScoreState:render()
-    love.graphics.setFont(gFonts['large'])
-    love.graphics.printf("Game Over", 0, 70, VIRTUAL_WIDTH, 'center')
     local score = self.time or '---'
-    love.graphics.printf("Score : " .. tostring(score), 0, 110, VIRTUAL_WIDTH, 'center')
+    love.graphics.setFont(gFonts['large'])
+    local gameOverText = ""
+    if score <= 7 then
+        gameOverText = "Game Over"
+    elseif score <= 15  then
+        gameOverText = "Nicely done"
+    elseif score < 25  then
+        gameOverText = "Amazing!"
+    elseif score == 25 then
+        gameOverText = "Winner!"
+    elseif score > 25 then
+        gameOverText = "!!SUPERHUMAN!!"
+    end
+
+    love.graphics.printf(""..tostring(gameOverText), 0, 70, VIRTUAL_WIDTH, 'center')
+    
+    love.graphics.printf("Tiles : " .. tostring(score) .. " / 25", 0, 110, VIRTUAL_WIDTH, 'center')
     love.graphics.setFont(gFonts['medium'])
 
 

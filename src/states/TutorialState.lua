@@ -54,8 +54,8 @@ function TutorialState:render()
     --WASD / Arrows
     love.graphics.printf("WASD or arrow keys to move", 0, 100, VIRTUAL_WIDTH, 'center')
     
-    love.graphics.setColor(255,0,0)
-    love.graphics.printf("current objective : survive", 0, 160, VIRTUAL_WIDTH, 'center')
+    -- love.graphics.setColor(255,0,0)
+    love.graphics.printf("collect all the tiles!", 0, 160, VIRTUAL_WIDTH, 'center')
 
 
     love.graphics.setColor(255,255,255)

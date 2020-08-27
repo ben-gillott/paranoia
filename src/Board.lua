@@ -18,6 +18,18 @@ function Board:init(tile_gapIn, tile_sizeIn, cx, cy)
 end
 
 
+-- function Board:tileScore()
+--     local count = 0
+--     for i=1,5 do
+--         for j=1,5 do
+--             if not (self.map[i][j]:onSafe()) then
+--                 count = count+1
+--             end
+--         end
+--     end
+--     return count
+-- end
+
 function Board:update(dt)
     for i=1,5 do
         for j=1,5 do

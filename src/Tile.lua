@@ -34,6 +34,15 @@ function Tile:onFalling()
     return false
 end
 
+
+function Tile:onSafe()
+    if self.state == "safe" then
+        return true
+    end
+    return false
+end
+
+
 function Tile:setTarget(tx, ty)
     self.t_y = ty
     self.t_x = tx
