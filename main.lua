@@ -23,7 +23,7 @@ function love.load()
     math.randomseed(os.time())
 
     -- set the application title bar
-    love.window.setTitle('Sleepy Boi')
+    love.window.setTitle('Terrible Tiles')
 
     -- initialize our nice-looking retro text fonts
     gFonts = {
