@@ -1,7 +1,4 @@
-# paranoia
-Paranoia tile hopping game
-
-eyyyyyy bitch
+# Tile Game
 
 
 To get changes from bean to liz:
